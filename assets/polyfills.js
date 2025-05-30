@@ -1,20 +1,16 @@
 // https://thoughtbot.github.io/superglue/recipes/ssr/
 export {TextEncoder, TextDecoder} from 'text-encoding'
 
-export function MessageChannel() {
+const messageChannel = function () {
   this.port1 = {
-    postMessage: function (message) {
-      console.log('Message sent from port1:', message);
-    },
+    postMessage: function (message) {},
   };
 
   this.port2 = {
     addEventListener: function (event, handler) {
-      console.log(`Event listener added for ${event} on port2`);
       this._eventHandler = handler;
     },
     removeEventListener: function (event) {
-      console.log(`Event listener removed for ${event} on port2`);
       this._eventHandler = null;
     },
     simulateMessage: function (data) {
@@ -23,4 +19,6 @@ export function MessageChannel() {
       }
     },
   };
-}
+};
+
+export const MessageChannel = typeof document != "undefined" ? window.MessageChannel : messageChannel;

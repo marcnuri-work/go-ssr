@@ -19,11 +19,31 @@ func StartServer() {
 }
 
 func main(c *gin.Context) {
-	esBuilt := esBuild()
+	js := esBuild()
 	// Render using V8 (c++ bindings)
-	html, err := v8Eval(esBuilt)
+	dom, err := v8Eval(js)
 	// Render using Goja (Go native JS)
-	html, err = evalJavaScript(esBuilt)
+	dom, err = evalJavaScript(js)
+	html := fmt.Sprintf(`
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Go SSR</title>
+		</head>
+		<body>
+			<div id="root">%s</div>
+			<script type="module">
+				window.goSsr = {render: () => {
+				}};
+			</script>
+			<script type="module">
+				%s
+			</script>
+		</body>
+		</html>
+	`, dom, js)
 	if err != nil {
 		fmt.Printf("Error evaluating JavaScript: %v\n", err)
 		c.String(500, "Internal Server Error")
