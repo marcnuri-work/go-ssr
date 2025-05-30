@@ -1,0 +1,10 @@
+{
+  "name": "assets",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react":"19.1.0",
+    "react-dom": "19.1.0",
+    "text-encoding": "0.7.0"
+  }
+}
